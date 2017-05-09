@@ -56,13 +56,55 @@ class BackBullionTest < Minitest::Test
   end
 
   def test_interest_for_student
-    skip
     student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: 'student'}
     student = BackBullion::Student.new(student_params)
     income = BackBullion::Income.new(student, @db_interface)
 
     interest = BackBullion::Interest.new(income)
 
-    assert_equal interest.value, 0.053
+    assert_equal interest.value, 0.053, 0.001
+  end
+
+  def test_interest_for_student
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '4 yr pqe'}
+    student = BackBullion::Student.new(student_params)
+    income = BackBullion::Income.new(student, @db_interface)
+
+    interest = BackBullion::Interest.new(income)
+
+    assert_equal interest.value, 0.053, 0.001
+  end
+
+  def test_calculate_main_deb_1
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3000, exp_level: 'student'}
+    student = BackBullion::Student.new(student_params)
+    income = BackBullion::Income.new(student, @db_interface)
+    interest = BackBullion::Interest.new(income)
+
+    calculator = BackBullion::StudentFinancialCalculator.new(student, interest)
+
+    assert_equal calculator.main_debt, 39952
+  end
+
+  def test_calculate_main_deb_2
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9500, maintenance_loan: 3500, exp_level: '4 yr pqe'}
+    student = BackBullion::Student.new(student_params)
+    income = BackBullion::Income.new(student, @db_interface)
+    interest = BackBullion::Interest.new(income)
+
+    calculator = BackBullion::StudentFinancialCalculator.new(student, interest)
+
+    assert_equal calculator.main_debt, 43282
+  end
+
+  def test_calculate_loan_progression_for_30_years
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9500, maintenance_loan: 3500, exp_level: '4 yr pqe'}
+    student = BackBullion::Student.new(student_params)
+    income = BackBullion::Income.new(student, @db_interface)
+    interest = BackBullion::Interest.new(income)
+
+    calculator = BackBullion::StudentFinancialCalculator.new(student, interest)
+
+    assert_equal calculator.loan_fo_30_years, [43282, ]
   end
 end

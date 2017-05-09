@@ -81,6 +81,30 @@ module BackBullion
   end
 
   class Interest
+    def initialize(income)
+    end
 
+    def value
+      0.053
+    end
+  end
+
+  class StudentFinancialCalculator
+    def initialize(student, interest)
+      @student = student
+      @interest = interest
+    end
+
+    def main_debt
+      result = 0
+      3.times.each do 
+        result = (result + @student.tuition_fee + @student.maintenance_loan)*(1+@interest.value)
+      end
+      result.to_i
+    end
+
+    def loan_fo_30_years
+
+    end
   end
 end
