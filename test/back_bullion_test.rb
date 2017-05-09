@@ -81,7 +81,7 @@ class BackBullionTest < Minitest::Test
     income = BackBullion::Income.new(student, @db_interface)
     interest = BackBullion::Interest.new(income)
 
-    calculator = BackBullion::StudentFinancialCalculator.new(student, interest)
+    calculator = BackBullion::StudentFinancialCalculator.new(student, interest, nil)
 
     assert_equal calculator.main_debt, 39952
   end
@@ -92,7 +92,7 @@ class BackBullionTest < Minitest::Test
     income = BackBullion::Income.new(student, @db_interface)
     interest = BackBullion::Interest.new(income)
 
-    calculator = BackBullion::StudentFinancialCalculator.new(student, interest)
+    calculator = BackBullion::StudentFinancialCalculator.new(student, interest, nil)
 
     assert_equal calculator.main_debt, 43282
   end
@@ -102,9 +102,10 @@ class BackBullionTest < Minitest::Test
     student = BackBullion::Student.new(student_params)
     income = BackBullion::Income.new(student, @db_interface)
     interest = BackBullion::Interest.new(income)
+    repayment = BackBullion::Repayment.new(income, @db_interface)
 
-    calculator = BackBullion::StudentFinancialCalculator.new(student, interest)
+    calculator = BackBullion::StudentFinancialCalculator.new(student, interest, repayment)
 
-    assert_equal calculator.loan_fo_30_years, [43282, ]
+    assert_equal calculator.loan_fo_30_years, [43282, 42833, 42361, 41864, 41340, 40789, 40208, 39597, 38953, 38275, 37561, 36809, 36017, 35183, 34305, 33381, 32408, 31383, 30304, 29168, 27971, 26711, 25384, 23987, 22516, 20967, 19336, 17618, 15809, 13904]
   end
 end
