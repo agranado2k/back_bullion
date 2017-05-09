@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>BackBullion - Student Financial Calculator</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Optional theme -->
+  <link rel="stylesheet" href="https://necolas.github.io/normalize.css/7.0.0/normalize.css">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+  <form id="calculator" class="form-signin">
+      <h2 class="form-signin-heading">Student Financial Calculator</h2>
+    <div class="row">
+      <div class="col-lg-2">
+        <div class="form-group input-group-lg">
+          <select id="job_role" class="form-control">
+            <option value="laywer">Laywer</option>
+          </select>
+        </div>
+      </div><!-- /.col-lg-4 -->
+      <div class="col-lg-2">
+        <div class="form-group input-group-lg">
+          <select id="exp_level" class="form-control">
+            <% exp_level_list.each do |level| %>
+            <option value=<%= level %>><%= level.capitalize %></option>
+            <% end %>
+          </select>
+        </div>
+      </div><!-- /.col-lg-4 -->
+      <div class="col-lg-2">
+        <div class="input-group input-group-lg">
+          <input id="age" type="text" class="form-control" placeholder="Age" aria-describedby="sizing-addon1">
+        </div>
+      </div><!-- /.col-lg-4 -->
+    </div><!-- /.row -->
+    <br />
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="input-group input-group-lg">
+          <input id="tuition_fee" type="text" class="form-control" placeholder="Tuition Fee" aria-describedby="sizing-addon1">
+        </div>
+      </div><!-- /.col-lg-4 -->
+      <div class="col-lg-3">
+        <div class="input-group input-group-lg">
+          <input id="maintenance_loan" type="text" class="form-control" placeholder="Maintenance Loan" aria-describedby="sizing-addon1">
+        </div>
+      </div><!-- /.col-lg-4 -->
+    </div><!-- /.row -->
+    <br />
+    <div class="row">
+      <div class="col-lg-6">
+        <button id="calcule" type="button" class="btn btn-default">Calculate</button>
+      </div>
+    </div>
+  </form>
+  <br />
+  <div id="warn" class="alert alert-danger" role="alert">Please! Fill the form! :)</div>
+  <br />
+
+  <div id="progression_div">
+    <h3 class="form-signin-heading">Loan progression</h3>
+
+    <table id="progression_table" class="table table-bordered">
+    </table>  
+  </div>
+  
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+  $("#warn").hide();
+  $("#progression_table").hide();
+
+  var validateField = function(field){
+    return (field.val() !== "");
+  };
+
+  var validateForm = function(){
+    return (validateField($("#job_role")) && validateField($("#exp_level")) && validateField($("#age")) && validateField($("#tuition_fee")) && validateField($("#maintenance_loan")));
+  };  
+
+  var handlerSuccess = function(response){
+    $("#progression_div").fadeIn();
+
+    var tabelHTML = "<thead><tr>";
+    $.each(response, function(index, value){
+      tabelHTML = tabelHTML + "<th>"+index+"</th>";
+    });
+    tabelHTML = tabelHTML +  "</tr></thead><tbody><tr>";
+
+    $.each(response, function(index, value){
+      tabelHTML = tabelHTML +  "<td>"+value+"</td>";
+    });
+
+    tabelHTML = tabelHTML +  "</tr></tbody>";
+    $("#progression_div").html($.parseHTML(tabelHTML));
+  };
+
+  var handlerFail = function(resposne){
+
+  };
+
+  $("button#calcule").click(function(event) {
+    if(validateForm()){
+      $("#warn").hide();
+      var $btn = $(this).button('loading');
+      var data = {job_role: $("#job_role").val(), exp_level: $("#exp_level").val(), age: $("#age").val(), tuition_fee: $("#tuition_fee").val(), maintenance_loan: $("#maintenance_loan").val()};
+      $.ajax({
+        type: 'POST',
+        url: '/calculate',
+        data: data,
+        cache: false,
+        crossDomain: true,
+        dataType: 'json',
+        success: handlerSuccess,
+        error: handlerFail
+      });
+
+      $btn.button('reset')
+    }else{
+      $("#warn").fadeIn();
+    }
+  });
+</script>
+</body>
+</html>

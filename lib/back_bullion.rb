@@ -47,6 +47,10 @@ module BackBullion
     def repayment_by_income_and_plan(income, plan)
       PLANS[plan].select{|i_to_r| income.between?(i_to_r[:low], i_to_r[:high])}.first
     end
+
+    def exp_level_list
+      JOB_ROLES['laywer'].keys
+    end
   end
 
   class Income

@@ -108,4 +108,8 @@ class BackBullionTest < Minitest::Test
 
     assert_equal calculator.loan_fo_30_years, [43282, 42833, 42361, 41864, 41340, 40789, 40208, 39597, 38953, 38275, 37561, 36809, 36017, 35183, 34305, 33381, 32408, 31383, 30304, 29168, 27971, 26711, 25384, 23987, 22516, 20967, 19336, 17618, 15809, 13904]
   end
+
+  def test_get_exp_level_list
+    assert_equal @db_interface.exp_level_list, ['student', '1st yr trainee', '2nd yr trainee', 'NQ', '1 yr pqe', '2 yr pqe', '3 yr pqe', '4 yr pqe', '5 yr pqe', '6 yr pqe', '7 yr pqe', '8 yr pqe', 'junior partner', 'Equity partner']
+  end
 end
