@@ -31,7 +31,7 @@
         <div class="form-group input-group-lg">
           <select id="exp_level" class="form-control">
             <% exp_level_list.each do |level| %>
-            <option value=<%= level %>><%= level.capitalize %></option>
+            <option value=<%= level %>><%= level.capitalize.gsub(/_/,' ') %></option>
             <% end %>
           </select>
         </div>
@@ -70,7 +70,38 @@
     <h3 class="form-signin-heading">Loan progression</h3>
 
     <table id="progression_table" class="table table-bordered">
-    </table>  
+      <thead>
+        <tr>
+          <% 15.times.each_with_index do |index| %>
+            <th><%= index+1 %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <% 15.times.each_with_index do |index| %>
+          <td id="cell_<%= index %>"></td>
+        <% end %>
+      </tr>
+      </tbody>
+    </table>
+    <br />
+    <table id="progression_table" class="table table-bordered">
+      <thead>
+        <tr>
+          <% 15.times.each_with_index do |index| %>
+            <th><%= index+16 %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <% 15.times.each_with_index do |index| %>
+          <td id="cell_<%= index+15 %>"></td>
+        <% end %>
+      </tr>
+      </tbody>
+    </table>   
   </div>
   
 </div>
@@ -80,7 +111,7 @@
 
 <script type="text/javascript">
   $("#warn").hide();
-  $("#progression_table").hide();
+  // $("#progression_table").hide();
 
   var validateField = function(field){
     return (field.val() !== "");
@@ -92,19 +123,9 @@
 
   var handlerSuccess = function(response){
     $("#progression_div").fadeIn();
-
-    var tabelHTML = "<thead><tr>";
     $.each(response, function(index, value){
-      tabelHTML = tabelHTML + "<th>"+index+"</th>";
+      $("#cell_"+ index).text(value);
     });
-    tabelHTML = tabelHTML +  "</tr></thead><tbody><tr>";
-
-    $.each(response, function(index, value){
-      tabelHTML = tabelHTML +  "<td>"+value+"</td>";
-    });
-
-    tabelHTML = tabelHTML +  "</tr></tbody>";
-    $("#progression_div").html($.parseHTML(tabelHTML));
   };
 
   var handlerFail = function(resposne){

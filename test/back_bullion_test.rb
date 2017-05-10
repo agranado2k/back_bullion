@@ -6,7 +6,7 @@ class BackBullionTest < Minitest::Test
   end
 
   def test_student
-    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '1st yr trainee'}
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '1st_yr_trainee'}
     
     student = BackBullion::Student.new(student_params)
 
@@ -14,11 +14,11 @@ class BackBullionTest < Minitest::Test
     assert_equal student.job_role, 'laywer'
     assert_equal student.tuition_fee, 9000
     assert_equal student.maintenance_loan, 3500
-    assert_equal student.exp_level, '1st yr trainee'
+    assert_equal student.exp_level, '1st_yr_trainee'
   end
 
   def test_income_for_1st_yr_trainee
-    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '1st yr trainee'}
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '1st_yr_trainee'}
     student = BackBullion::Student.new(student_params)
 
     income = BackBullion::Income.new(student, @db_interface)
@@ -27,7 +27,7 @@ class BackBullionTest < Minitest::Test
   end
 
   def test_income_for_4_yr_pqe
-    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '4 yr pqe'}
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '4_yr_pqe'}
     student = BackBullion::Student.new(student_params)
 
     income = BackBullion::Income.new(student, @db_interface)
@@ -46,7 +46,7 @@ class BackBullionTest < Minitest::Test
   end
 
   def test_repayment_for_until_88000_income
-    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '4 yr pqe'}
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '4_yr_pqe'}
     student = BackBullion::Student.new(student_params)
     income = BackBullion::Income.new(student, @db_interface)
 
@@ -66,7 +66,7 @@ class BackBullionTest < Minitest::Test
   end
 
   def test_interest_for_student
-    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '4 yr pqe'}
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9000, maintenance_loan: 3500, exp_level: '4_yr_pqe'}
     student = BackBullion::Student.new(student_params)
     income = BackBullion::Income.new(student, @db_interface)
 
@@ -87,7 +87,7 @@ class BackBullionTest < Minitest::Test
   end
 
   def test_calculate_main_deb_2
-    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9500, maintenance_loan: 3500, exp_level: '4 yr pqe'}
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9500, maintenance_loan: 3500, exp_level: '4_yr_pqe'}
     student = BackBullion::Student.new(student_params)
     income = BackBullion::Income.new(student, @db_interface)
     interest = BackBullion::Interest.new(income)
@@ -98,7 +98,7 @@ class BackBullionTest < Minitest::Test
   end
 
   def test_calculate_loan_progression_for_30_years
-    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9500, maintenance_loan: 3500, exp_level: '4 yr pqe'}
+    student_params = {age: 35, job_role: 'laywer', tuition_fee: 9500, maintenance_loan: 3500, exp_level: '4_yr_pqe'}
     student = BackBullion::Student.new(student_params)
     income = BackBullion::Income.new(student, @db_interface)
     interest = BackBullion::Interest.new(income)
@@ -110,6 +110,6 @@ class BackBullionTest < Minitest::Test
   end
 
   def test_get_exp_level_list
-    assert_equal @db_interface.exp_level_list, ['student', '1st yr trainee', '2nd yr trainee', 'NQ', '1 yr pqe', '2 yr pqe', '3 yr pqe', '4 yr pqe', '5 yr pqe', '6 yr pqe', '7 yr pqe', '8 yr pqe', 'junior partner', 'Equity partner']
+    assert_equal @db_interface.exp_level_list, ['student', '1st_yr_trainee', '2nd_yr_trainee', 'NQ', '1_yr_pqe', '2_yr_pqe', '3_yr_pqe', '4_yr_pqe', '5_yr_pqe', '6_yr_pqe', '7_yr_pqe', '8_yr_pqe', 'junior_partner', 'Equity_partner']
   end
 end
