@@ -69,7 +69,7 @@
   <div id="progression_div">
     <h3 class="form-signin-heading">Loan progression</h3>
 
-    <table id="progression_table" class="table table-bordered">
+    <table id="progression_table_1" class="table table-bordered">
       <thead>
         <tr>
           <% 15.times.each_with_index do |index| %>
@@ -86,7 +86,7 @@
       </tbody>
     </table>
     <br />
-    <table id="progression_table" class="table table-bordered">
+    <table id="progression_table_2" class="table table-bordered">
       <thead>
         <tr>
           <% 15.times.each_with_index do |index| %>
@@ -103,15 +103,21 @@
       </tbody>
     </table>   
   </div>
+
+  <div class="row">
+    <!-- <canvas id="myChart" width="75" height="50"></canvas> -->
+  </div>
   
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 
 <script type="text/javascript">
   $("#warn").hide();
-  // $("#progression_table").hide();
+  $("#progression_div").hide();
+  $("#myChart").hide();
 
   var validateField = function(field){
     return (field.val() !== "");
@@ -121,11 +127,28 @@
     return (validateField($("#job_role")) && validateField($("#exp_level")) && validateField($("#age")) && validateField($("#tuition_fee")) && validateField($("#maintenance_loan")));
   };  
 
+  var chartGeneration = function(data){
+    var ctx = document.getElementById("myChart");
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var ctx = $("#myChart");
+    var myLineChart = Chart.Line(ctx, {
+      data: {datasets: [{label: "fiancial loan", data: data}]}
+    });
+  };
+
   var handlerSuccess = function(response){
-    $("#progression_div").fadeIn();
+    $("#progression_div").hide();
+    $("#myChart").hide();
+    
+    var data = [];
     $.each(response, function(index, value){
       $("#cell_"+ index).text(value);
+      data[index] = {x: (index+1), y: value};
     });
+    // chartGeneration(data);
+
+    $("#progression_div").fadeIn();
+    $("#myChart").fadeIn();
   };
 
   var handlerFail = function(resposne){
